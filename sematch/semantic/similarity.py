@@ -16,6 +16,7 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
+from __future__ import print_function
 
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import wordnet as wn
@@ -135,10 +136,10 @@ class ConceptSimilarity:
         path = self.shortest_path_length(c1, c2) - 1
         lcs = self.least_common_subsumer(c1, c2)
         depth = self.depth(lcs)
-        # print path, lcs, depth
+        # print(path, lcs, depth)
         x = math.exp(-alpha * path)
         y = math.exp(beta * depth)
-        # print y
+        # print(y)
         z = math.exp(-beta * depth)
         a = y - z
         b = y + z
@@ -579,4 +580,3 @@ class EntitySimilarity:
         x = math.log(max([a,b])) - math.log(ab)
         y = math.log(self._stats.entity_N()) - math.log(min([a,b]))
         return x / y
-

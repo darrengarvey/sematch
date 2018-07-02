@@ -16,6 +16,8 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
+from __future__ import print_function
+
 from sematch.semantic.sparql import NameSPARQL, QueryGraph
 from sematch.semantic.similarity import YagoTypeSimilarity
 from sematch.utility import memoized
@@ -23,6 +25,7 @@ from sematch.nlp import word_tokenize, word_process, Extraction
 
 import numpy as np
 import itertools
+import six
 from collections import Counter
 
 
@@ -148,7 +151,7 @@ class SimClassifier:
         Compute the weight for each feature token in each category
         The weight is computed as token_count / total_feature_count
         '''
-        print "Training..."
+        print("Training...")
         cat_word = {}
         for sent, cat in corpus:
             cat_word.setdefault(cat, []).extend(word_process(word_tokenize(sent)))
@@ -156,7 +159,7 @@ class SimClassifier:
         labels = features.keys()
         cat_features = {}
         feature_weights = {}
-        for c, f in features.iteritems():
+        for c, f in six.iteritems(features):
             w_c_pairs = f.most_common(feature_num)
             words, counts = zip(*w_c_pairs)
             cat_features[c] = words
@@ -176,7 +179,7 @@ class SimClassifier:
         :return: weighted word similarity score between word and category
         """
         features, weights = zip(*self._feature_weights[category])
-        scores = map(lambda x: self._sim_metric(word, x), features)
+        scores = list(map(lambda x: self._sim_metric(word, x), features))
         return np.dot(np.array(scores), np.array(weights).transpose())
 
     def max_similarity(self, word, category):
@@ -282,7 +285,7 @@ class TextPreprocessor(BaseEstimator, TransformerMixin):
             cat_word.setdefault(cat, []).extend(word_process(word_tokenize(sent)))
         features = {cat: Counter(cat_word[cat]) for cat in cat_word}
         feature_words = []
-        for c, f in features.iteritems():
+        for c, f in six.iteritems(features):
             words, counts = zip(*f.most_common(feature_num))
             feature_words.extend(list(words))
         feature_words = set(feature_words)

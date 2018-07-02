@@ -22,6 +22,7 @@ from itertools import combinations
 
 import networkx as nx
 import numpy as np
+import six
 
 from sematch.semantic.ontology import DBpedia
 from sematch.utility import FileIO
@@ -186,7 +187,7 @@ class SimGraph:
 
     def page_rank(self):
         rank_scores = nx.pagerank(self._graph)
-        return {self._nodes[key]: value for key, value in rank_scores.iteritems()}
+        return {self._nodes[key]: value for key, value in six.iteritems(rank_scores)}
 
     def hits(self):
         '''h, a = hits() hub and authority'''
@@ -247,5 +248,3 @@ class GraphIC:
         :return:
         """
         FileIO.append_json_file(filename, data)
-
-

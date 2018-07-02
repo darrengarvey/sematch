@@ -25,6 +25,7 @@ from sematch.semantic.similarity import YagoTypeSimilarity
 from sematch.utility import FileIO
 
 import numpy as np
+import six
 from scipy.stats import t, norm
 from math import atanh, pow
 from numpy import tanh
@@ -323,7 +324,7 @@ class WordSimEvaluation:
         :return: a dictionary containing similarity metric name and its correlation with human
         """
         cor_dict = {}
-        for sim_name, sim_func in sim_dict.iteritems():
+        for sim_name, sim_func in six.iteritems(sim_dict):
             cor_dict[sim_name] = self.evaluate_metric(sim_name, sim_func, dataset_name, save_results=True)
         return cor_dict
 
